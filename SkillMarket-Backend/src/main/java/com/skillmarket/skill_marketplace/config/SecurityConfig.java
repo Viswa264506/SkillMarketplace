@@ -57,9 +57,9 @@ public class SecurityConfig {
 
         // Allowed Frontend URLs
         config.setAllowedOrigins(List.of(
-                "http://localhost:5173",
-                "https://skillmarket-production-4f3b.up.railway.app"
-        ));
+        "http://localhost:5173",
+        "https://skillmarketplace-frontend.onrender.com"
+));
 
         config.setAllowedMethods(List.of(
                 "GET",
