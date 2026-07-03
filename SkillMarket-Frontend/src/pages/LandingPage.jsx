@@ -77,7 +77,7 @@ useEffect(() => {
       <nav className="bg-gray-100 sticky top-0 z-50 border-b border-gray-200">
         <div className="max-w-6xl mx-auto px-8 py-4 flex items-center justify-between">
           {/* Logo */}
-         <a href="skillmarket-production-4f3b.up.railway.app" className="flex items-center gap-2">
+         <a href="/" className="flex items-center gap-2">
             <span
               className="text-xl font-black tracking-tight text-gray-900 cursor-pointer shrink-0"
             >
