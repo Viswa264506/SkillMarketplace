@@ -1,0 +1,31 @@
+# ==== Backend (Spring Boot) ====
+SkillMarket-Backend/target/
+SkillMarket-Backend/.mvn/
+SkillMarket-Backend/.idea/
+SkillMarket-Backend/*.iml
+SkillMarket-Backend/HELP.md
+*.class
+*.jar
+*.war
+
+# ==== Frontend (React + Vite) ====
+SkillMarket-Frontend/node_modules/
+SkillMarket-Frontend/dist/
+SkillMarket-Frontend/dist-ssr/
+SkillMarket-Frontend/.env
+SkillMarket-Frontend/.env.local
+SkillMarket-Frontend/.vite/
+SkillMarket-Frontend/*.local
+SkillMarket-Frontend/npm-debug.log*
+SkillMarket-Frontend/yarn-debug.log*
+SkillMarket-Frontend/yarn-error.log*
+
+# ==== General ====
+.env
+.env.local
+.DS_Store
+*.log
+.idea/
+*.iml
+.vscode/
+!.vscode/extensions.json
