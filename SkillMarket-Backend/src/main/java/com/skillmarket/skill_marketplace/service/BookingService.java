@@ -34,20 +34,23 @@ public class BookingService {
     }
 
     private BookingResponse toResponse(Booking b) {
-        return new BookingResponse(
-                b.getId(),
-                b.getService().getTitle(),
-                b.getClient().getName(),
-                b.getClient().getEmail(),
-                b.getService().getProvider().getName(),
-                b.getStatus().name(),
-                b.getBookingDate().toString(),
-                b.getNotes(),
-                b.getProviderLat(),
-                b.getProviderLng(),
-                b.getLocationUpdatedAt() != null ? b.getLocationUpdatedAt().toString() : null
-        );
-    }
+    return new BookingResponse(
+            b.getId(),
+            b.getService().getTitle(),
+            b.getClient().getName(),
+            b.getClient().getEmail(),
+            b.getService().getProvider().getName(),
+            b.getStatus().name(),
+            b.getBookingDate().toString(),
+            b.getNotes(),
+            b.getRejectionReason(),
+            b.getProviderLat(),
+            b.getProviderLng(),
+            b.getLocationUpdatedAt() != null
+                    ? b.getLocationUpdatedAt().toString()
+                    : null
+    );
+}
 
     // CLIENT: book a service
     public BookingResponse createBooking(BookingRequest request) {
@@ -172,4 +175,28 @@ public class BookingService {
 
         return toResponse(booking);
     }
+
+    public BookingResponse rejectBooking(Long id, String reason) {
+
+    Booking booking = bookingRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Booking not found"));
+
+    booking.setStatus(BookingStatus.REJECTED);
+    booking.setRejectionReason(reason);
+
+    Booking saved = bookingRepository.save(booking);
+
+    try {
+        emailService.sendBookingStatusToClient(
+                booking.getClient().getEmail(),
+                booking.getClient().getName(),
+                booking.getService().getTitle(),
+                "REJECTED"
+        );
+    } catch (Exception e) {
+        System.out.println("Email failed: " + e.getMessage());
+    }
+
+    return toResponse(saved);
+}
 }

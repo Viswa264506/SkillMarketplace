@@ -38,10 +38,17 @@ public class Booking {
     @Column(name = "notes", length = 500)
     private String notes;
 
+    // NEW: Reason for rejection
+    @Column(name = "rejection_reason", length = 500)
+    private String rejectionReason;
+
     @Column(name = "created_at")
     private LocalDateTime createdAt;
 
-    // Phase F — live provider tracking
+    // ==========================
+    // Phase F — Live Tracking
+    // ==========================
+
     @Column(name = "provider_lat")
     private Double providerLat;
 
