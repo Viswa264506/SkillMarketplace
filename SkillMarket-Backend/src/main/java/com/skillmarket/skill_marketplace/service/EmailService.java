@@ -1,25 +1,57 @@
 package com.skillmarket.skill_marketplace.service;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
-@RequiredArgsConstructor
 public class EmailService {
 
-    private final JavaMailSender mailSender;
+    @Value("${brevo.api.key}")
+    private String brevoApiKey;
+
+    @Value("${brevo.sender.email}")
+    private String senderEmail;
+
+    private final RestTemplate restTemplate = new RestTemplate();
 
     private void sendEmail(String to, String subject, String body) {
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
-        mailSender.send(message);
+        String url = "https://api.brevo.com/v3/smtp/email";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.set("api-key", brevoApiKey);
+        headers.set("accept", "application/json");
+
+        Map<String, Object> payload = new HashMap<>();
+
+        Map<String, String> sender = new HashMap<>();
+        sender.put("name", "SkillMarket");
+        sender.put("email", senderEmail);
+        payload.put("sender", sender);
+
+        Map<String, String> recipient = new HashMap<>();
+        recipient.put("email", to);
+        payload.put("to", new Object[]{recipient});
+
+        payload.put("subject", subject);
+        payload.put("textContent", body);
+
+        HttpEntity<Map<String, Object>> request = new HttpEntity<>(payload, headers);
+
+        try {
+            restTemplate.postForEntity(url, request, String.class);
+        } catch (Exception e) {
+            System.err.println("Failed to send email via Brevo: " + e.getMessage());
+        }
     }
 
-    // Called when client creates a booking → notify provider
     public void sendBookingCreatedToProvider(String providerEmail, String providerName,
                                              String clientName, String serviceName) {
         sendEmail(
@@ -34,7 +66,6 @@ public class EmailService {
         );
     }
 
-    // Called when provider accepts/rejects → notify client
     public void sendBookingStatusToClient(String clientEmail, String clientName,
                                           String serviceName, String status) {
         sendEmail(
@@ -49,7 +80,6 @@ public class EmailService {
         );
     }
 
-    // Called when booking is completed → notify client
     public void sendBookingCompletedToClient(String clientEmail, String clientName,
                                              String serviceName) {
         sendEmail(
