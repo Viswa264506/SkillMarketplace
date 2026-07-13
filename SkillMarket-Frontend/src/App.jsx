@@ -22,6 +22,11 @@ import Chat from './pages/Chat';
 import ServiceDetail from './pages/ServiceDetail';
 
 function App() {
+
+  useEffect(() => {
+    fetch("https://your-backend.onrender.com/");
+}, []);
+  
   return (
     <AuthProvider>
       <BrowserRouter>
