@@ -20,6 +20,7 @@ import ProviderSetup from './pages/ProviderSetup';
 import SearchResults from './pages/SearchResults';
 import Chat from './pages/Chat';
 import ServiceDetail from './pages/ServiceDetail';
+import {useEffect} from 'react'; 
 
 function App() {
 
